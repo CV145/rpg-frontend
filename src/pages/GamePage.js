@@ -51,18 +51,21 @@ const GamePage = () => {
     //Handle user input and add it to messages
     const handleUserInput = () => {
         if (userMessage.trim() !== "") {
+            // Create a new message object for the user's input
+            const userMessageObject = { text: userMessage, isUserMessage: true };
+
             // Add the user message to the messages array
-            setMessages([...messages, { text: userMessage, isUserMessage: true }]);
-            
+            setMessages(prevMessages => [...prevMessages, userMessageObject]);
+
             // Clear the input field
             setUserMessage("");
 
-            // Send the action to the API and sets response in messages
-            sendActionToApi();
+            // Send the action to the API and update the response in messages
+            sendActionToApi(userMessageObject);
         }
     };
 
-    const sendActionToApi = () => {
+    const sendActionToApi = (userMessageObject) => {
         if (userMessage.trim() === "") {
             return;
         }
@@ -70,7 +73,7 @@ const GamePage = () => {
         const requestBody = {
             enemyID: "SecurityBot", // Replace with actual enemyID
             playerID: "1", // Replace with actual playerID
-            action: userMessage
+            action: userMessageObject.text
         };
     
         axios.post(`${BASE_URL}/Game/sendactionprompt`, requestBody)
@@ -80,11 +83,10 @@ const GamePage = () => {
                 const content = response.data.choices[0].message.content;
 
                 // Create a new message object with the extracted content
-                const newMessage = { text: content, isUserMessage: false };
+                const responseMessageObject = { text: content, isUserMessage: false };
 
-                // API response contains the message to be displayed
-                // Update the messages state
-                setMessages([...messages, newMessage]);
+                // Update the messages state with the response message
+                setMessages(prevMessages => [...prevMessages, responseMessageObject]);
             })
             .catch(error => console.error('Error sending action:', error));
     
