@@ -1,12 +1,12 @@
 // GameContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
-//import axios from 'axios';
+import axios from 'axios';
 
 const GameContext = createContext();
 
 
 export const GameProvider = ({ children }) => {
-   /* const [playerData, setPlayerData] = useState({ stats: {}, items: [] });
+    const [playerData, setPlayerData] = useState({ stats: {}, items: [] });
 
     // Fetch player data from the backend
     useEffect(() => {
@@ -26,5 +26,5 @@ export const GameProvider = ({ children }) => {
         <GameContext.Provider value={{ playerData, updatePlayerData }}>
             {children}
         </GameContext.Provider>
-    );*/
+    );
 };
