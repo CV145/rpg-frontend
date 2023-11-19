@@ -1,0 +1,14 @@
+/* CSS for ItemsModal.js */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Adjust columns as needed */
+    grid-gap: 10px; /* Adjust spacing between items */
+}
+
+.item-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
