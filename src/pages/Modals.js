@@ -39,9 +39,13 @@ export const ItemsModal = ({ isOpen, onRequestClose }) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/Inventory/1`) 
+        const intervalId = setInterval(() => {
+            axios.get(`${BASE_URL}/Inventory/1`) 
             .then(response => setItems(response.data))
             .catch(error => console.error('Error fetching items:', error));
+        }, 5000); //Fetch every 5 seconds
+        
+        return () => clearInterval(intervalId);
     }, []);
 
 
@@ -94,6 +98,18 @@ export const ItemsModal = ({ isOpen, onRequestClose }) => {
 
 
 export const StatsModal = ({ isOpen, onRequestClose }) => {
+    const [stats, setStats] = useState([]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            axios.get(`${BASE_URL}/Stats/1`) 
+            .then(response => setStats(response.data))
+            .catch(error => console.error('Error fetching items:', error));
+        }, 5000); //Fetch every 5 seconds
+        
+        return () => clearInterval(intervalId);
+    }, []);
+
     return (
         <Modal
             isOpen={isOpen}
@@ -127,20 +143,39 @@ export const StatsModal = ({ isOpen, onRequestClose }) => {
             }}
         >
             <h2>Stats</h2>
-            <div className="items-grid" style={{ /* Similar grid style as ItemsModal */ }}>
-                {samplePlayerData.map((stat, index) => (
-                    <div key={index} className="" style={{ /* Similar card style as ItemsModal */ }}>
-                        <h3>{stat.stat}</h3>
-                        <p>{stat.value}</p>
+            <div className="items-grid">
+            {Object.entries(stats).map(([key, value], index) => {
+                if (key === "playerId") {
+                    // Skip playerId
+                    return null;
+                }
+                const formattedKey = formatCamelCase(key);
+                return (
+                    <div key={index} className="">
+                        <h3>{formattedKey}</h3>
+                        <p>{value}</p>
                     </div>
-                ))}
-            </div>
+                );
+            })}
+        </div>
             <button onClick={onRequestClose}>Close</button>
         </Modal>
     );
 };
 
 export const SpellsModal = ({ isOpen, onRequestClose }) => {
+    const [spells, setSpells] = useState([]);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            axios.get(`${BASE_URL}/Spells/1`) 
+            .then(response => setSpells(response.data))
+            .catch(error => console.error('Error fetching items:', error));
+        }, 5000); //Fetch every 5 seconds
+        
+        return () => clearInterval(intervalId);
+    }, []);
+
     return (
         <Modal
             isOpen={isOpen}
@@ -174,8 +209,8 @@ export const SpellsModal = ({ isOpen, onRequestClose }) => {
             }}
         >
             <h2>Spells</h2>
-            <div className="spells-grid" style={{ /* Similar grid style as ItemsModal */ }}>
-                {sampleSpells.map((spell, index) => (
+            <div className="spells-grid">
+                {spells.map((spell, index) => (
                     <div key={index} className="spell-card" style={{ /* Similar card style as ItemsModal */ }}>
                         <h3>{spell.name}</h3>
                         <p>{spell.description}</p>
@@ -186,3 +221,12 @@ export const SpellsModal = ({ isOpen, onRequestClose }) => {
         </Modal>
     );
 };
+
+const formatCamelCase = (str) => {
+    if (str == "Hp") return "HP";
+    else if (str == "Mp") return "MP";
+    else return str
+        // Uppercase the first character
+        .replace(/^./, (firstChar) => firstChar.toUpperCase());
+};
+
