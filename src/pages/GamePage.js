@@ -14,6 +14,7 @@ const GamePage = () => {
         { text: "You are fighting a security robot", isUserMessage: false },
         { text: "You can type commands in the input box below.", isUserMessage: false },
     ]);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     //State variables to manage modals
     const [isItemsModalOpen, setIsItemsModalOpen] = useState(false);
@@ -51,6 +52,12 @@ const GamePage = () => {
     //Handle user input and add it to messages
     const handleUserInput = () => {
         if (userMessage.trim() !== "") {
+            if (isProcessing)
+            {
+                return;
+            }
+
+
             // Create a new message object for the user's input
             const userMessageObject = { text: userMessage, isUserMessage: true };
 
@@ -59,6 +66,7 @@ const GamePage = () => {
 
             // Clear the input field
             setUserMessage("");
+            setIsProcessing(true);
 
             // Send the action to the API and update the response in messages
             sendActionToApi(userMessageObject);
@@ -87,8 +95,12 @@ const GamePage = () => {
 
                 // Update the messages state with the response message
                 setMessages(prevMessages => [...prevMessages, responseMessageObject]);
+                setIsProcessing(false);
             })
-            .catch(error => console.error('Error sending action:', error));
+            .catch(error => {
+                console.error('Error sending action:', error)
+                setIsProcessing(false);
+            });
     
         // Clear the input field
         setUserMessage("");
@@ -129,12 +141,14 @@ const GamePage = () => {
                             {message.text}
                         </div>
                     ))}
+                    {isProcessing && <div className="typing-indicator">Typing...</div>}
                 </div>
                 <div className="input-group">
                     <input type="text" className="form-control" 
                         value={userMessage}
                         onChange={(e) => setUserMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
+                        disabled={isProcessing}
                     />
                     <button className="btn btn-primary" onClick={handleUserInput}>Enter</button>
                 </div>
