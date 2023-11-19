@@ -3,14 +3,16 @@ import React, {useState} from 'react';
 import Modal from 'react-modal';
 import { SpellsModal, ItemsModal, StatsModal } from './Modals';
 import '../styles/GamePage.css'; 
+import axios from 'axios';
 
-Modal.setAppElement('#root'); // Set the app root element for accessibility
+const BASE_URL = 'https://localhost:7098';
+
 
 const GamePage = () => {
     const [messages, setMessages] = useState([
         { text: "Welcome to the game!", isUserMessage: false },
-        { text: "You find yourself in a mysterious forest.", isUserMessage: false },
-        { text: "You can type commands in the input box below.", isUserMessage: false }
+        { text: "You are fighting a security robot", isUserMessage: false },
+        { text: "You can type commands in the input box below.", isUserMessage: false },
     ]);
 
     //State variables to manage modals
@@ -54,7 +56,40 @@ const GamePage = () => {
             
             // Clear the input field
             setUserMessage("");
+
+            // Send the action to the API and sets response in messages
+            sendActionToApi();
         }
+    };
+
+    const sendActionToApi = () => {
+        if (userMessage.trim() === "") {
+            return;
+        }
+
+        const requestBody = {
+            enemyID: "SecurityBot", // Replace with actual enemyID
+            playerID: "1", // Replace with actual playerID
+            action: userMessage
+        };
+    
+        axios.post(`${BASE_URL}/Game/sendactionprompt`, requestBody)
+            .then(response => {
+
+                //Extract the "content"
+                const content = response.data.choices[0].message.content;
+
+                // Create a new message object with the extracted content
+                const newMessage = { text: content, isUserMessage: false };
+
+                // API response contains the message to be displayed
+                // Update the messages state
+                setMessages([...messages, newMessage]);
+            })
+            .catch(error => console.error('Error sending action:', error));
+    
+        // Clear the input field
+        setUserMessage("");
     };
 
     //Event handler for Enter key press
