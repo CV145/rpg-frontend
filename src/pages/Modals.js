@@ -1,8 +1,11 @@
-import React from 'react';
 import Modal from 'react-modal';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import '../styles/Modals.css'
 
 Modal.setAppElement('#root'); // Set the app root element for accessibility
+
+const BASE_URL = 'https://localhost:7098';
 
 // Sample items 
 const sampleItems = [
@@ -33,8 +36,14 @@ const sampleSpells = [
 ];
 
 export const ItemsModal = ({ isOpen, onRequestClose }) => {
-    console.log('ItemsModal isOpen:', isOpen);
-    console.log(sampleItems); // Check if sampleItems is populated
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        axios.get(`${BASE_URL}/Inventory/1`) 
+            .then(response => setItems(response.data))
+            .catch(error => console.error('Error fetching items:', error));
+    }, []);
+
 
     return (
         <Modal
@@ -70,7 +79,7 @@ export const ItemsModal = ({ isOpen, onRequestClose }) => {
         >
             <h2>Items</h2>
             <div className="items-grid" style={{ width: '100%', overflow: 'auto', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-                {sampleItems.map((item, index) => (
+                {items.map((item, index) => (
                     <div key={index} className="item-card" style={{ margin: '10px', width: 'calc(100% / 3 - 20px)' }}> {/* Adjust the width as per requirement */}
                         <h3>{item.name}</h3>
                         <p>{item.description}</p>
