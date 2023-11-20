@@ -93,6 +93,9 @@ const GamePage = () => {
                 // Create a new message object with the extracted content
                 const responseMessageObject = { text: content, isUserMessage: false };
 
+                //Do another API call (in a separate method) that does the prompt filtering, then parse it, then uses the updated data to update the database
+
+
                 // Update the messages state with the response message
                 setMessages(prevMessages => [...prevMessages, responseMessageObject]);
                 setIsProcessing(false);
