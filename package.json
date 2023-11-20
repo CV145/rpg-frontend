@@ -3,6 +3,9 @@
   "homepage": "https://cv145.github.io/rpg-frontend",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "18"
+  },  
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -46,4 +49,5 @@
   "devDependencies": {
     "gh-pages": "^6.1.0"
   }
+  
 }
