@@ -5,7 +5,7 @@ import { SpellsModal, ItemsModal, StatsModal } from './Modals';
 import '../styles/GamePage.css'; 
 import axios from 'axios';
 
-const BASE_URL = 'https://localhost:7098';
+const BASE_URL = 'https://rpgbackend.azurewebsites.net/';
 
 
 const GamePage = () => {

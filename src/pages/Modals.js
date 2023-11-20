@@ -5,7 +5,7 @@ import '../styles/Modals.css'
 
 Modal.setAppElement('#root'); // Set the app root element for accessibility
 
-const BASE_URL = 'https://localhost:7098';
+const BASE_URL = 'https://rpgbackend.azurewebsites.net/';
 
 // Sample items 
 const sampleItems = [

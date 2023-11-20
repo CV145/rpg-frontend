@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { GameProvider } from './services/GameContext';
 import SignInWithGoogle from './components/GoogleSignIn';
 import GamePage from './pages/GamePage'; 
